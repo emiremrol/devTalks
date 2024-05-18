@@ -2,33 +2,27 @@
 
 
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col border">
-                <div class="p-2 w-75">
-                    <h3 class="mb-3">Edit user</h3>
-                    {{ form_start(form) }}
-                    <div class="mb-3">
-                        {{ form_label(form.name, 'Name', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form_label(form.username, 'Username', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                        {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <button type="submit" class="btn btn-dark"><i class="bi bi-floppy"></i> Edit</button>
-
-                    {{ form_end(form) }}
+    <div class="container my-5 d-flex justify-content-center py-3">
+        <div class="w-50 p-2">
+            <div class="p-2 w-75">
+                <h3 class="mb-3">Edit user</h3>
+                {{ form_start(form) }}
+                <div class="mb-3">
+                    {{ form_label(form.name, 'Name', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
                 </div>
-            </div>
-            <div class="col border">
-                <a href="{{ path('user_change_password') }}" class="btn btn-danger"><i class="bi bi-lock-fill"></i> Change password</a>
+                <div class="mb-3">
+                    {{ form_label(form.username, 'Username', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <button type="submit" class="btn btn-dark"><i class="bi bi-floppy"></i> Edit</button>
+
+                {{ form_end(form) }}
             </div>
         </div>
-
     </div>
 {% endblock %}

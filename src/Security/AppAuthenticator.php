@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
@@ -22,7 +23,8 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'user_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator,
+    private AuthorizationCheckerInterface $authorizationChecker)
     {
     }
 
@@ -48,7 +50,12 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
+//        if($this->authorizationChecker->isGranted('ROLE_ADMIN')){
+//            return new RedirectResponse($this->urlGenerator->generate('admin'));
+//        }else if($this->authorizationChecker->isGranted('ROLE_USER')){
+//            return new RedirectResponse($this->urlGenerator->generate('user_edit'));
+//        }
+//        // For example:
         return new RedirectResponse($this->urlGenerator->generate('index_page'));
 
     }

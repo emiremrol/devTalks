@@ -1,0 +1,13 @@
+{% extends 'question/show.html.twig' %}
+
+
+
+
+{% block answers %}
+<div class="container py-3">
+    {% for answer in answers %}
+        <p>{{ answer.content }}</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

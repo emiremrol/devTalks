@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-info flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+
+    <div class="container d-flex justify-content-center align-items-center  py-3">
+        <div class="p-2">
+            <div class="my-3">
+                <h4>{{ question.title }}</h4>
+            </div>
+            <div class="mb-3">
+                <textarea name="" id="summernote2" readonly="true">{{ question.content }}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        {% for answer in answers %}
+            <p>{{ answer.user.username }}</p>
+            <p>{{ answer.content|raw }}</p>
+        {% endfor %}
+    </div>
+
+
+    <div class="container d-flex justify-content-center align-items-center  py-3">
+        <div class="p-2">
+            {{ form_start(answer_form) }}
+            <div class="mb-3">
+                <h4>Your Answer</h4>
+            </div>
+            <div class="mb-3">
+                <textarea name="{{ field_name(answer_form.content) }}" id="summernote"></textarea>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary" name="{{ field_name(answer_form.submit) }}">Ask</button>
+            </div>
+            {{ form_end(answer_form) }}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
