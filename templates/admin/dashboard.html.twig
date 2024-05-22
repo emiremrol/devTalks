@@ -3,5 +3,12 @@
 
 {% block main %}
     <h1>Hello, {{ app.user.username }}</h1>
+
+
+
+    {% for question in latestQuestions  %}
+        <p>{{ question.title }}</p>
+    {% endfor %}
+
     {# ... #}
 {% endblock main %}

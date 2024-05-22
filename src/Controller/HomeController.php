@@ -16,7 +16,7 @@ class HomeController extends AbstractController
     public function index(EntityManagerInterface $entityManager): Response
     {
         $categories = $entityManager->getRepository(Category::class)->findAll();
-        $allQuestions = $entityManager->getRepository(Question::class)->findAll();
+        $allQuestions = $entityManager->getRepository(Question::class)->findBy([], ['createdAt' => 'DESC']);
 
         return $this->render('home/index.html.twig', [
             'categories' => $categories,

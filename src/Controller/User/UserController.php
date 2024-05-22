@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,6 +40,24 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $photoFile = $form->get('userImg')->getData();
+
+            if($photoFile) {
+                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = uniqid().'.'.$photoFile->guessExtension();
+
+                try{
+                    $photoFile->move(
+                        $this->getParameter('photos'),
+                        $newFilename
+                    );
+                } catch (FileException $ex){
+
+                }
+
+                $user->setUserImg($newFilename);
+            }
+            $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash("success", "User updated successfully");
 

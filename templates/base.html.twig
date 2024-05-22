@@ -44,9 +44,13 @@
                         <li class="nav-item dropdown user-avatar">
                             <a class="nav-link" data-bs-toggle="dropdown" aria-current="page" href="#"
                                aria-expanded="false">
+                                {% if app.user.userImg %}
+                                    <img src="{{ asset(app.user.getUserImg()) }}" width="40" height="40" alt="" style="border-radius: 50%;">
+                                {% else %}
                                 <div>
                                     <span class="text-white">{{ app.user.name|first|upper }}</span>
                                 </div>
+                                {% endif %}
                             </a>
                             <ul class="dropdown-menu">
                                 {% if is_granted('ROLE_ADMIN') %}
@@ -93,7 +97,12 @@
         </div>
     </nav>
 {% endblock %}
-{% block body %}{% endblock %}
+<div class="container d-flex">
+    {% block sidebar %}
+    {% endblock %}
+    {% block body %}{% endblock %}
+</div>
+
 
 
 

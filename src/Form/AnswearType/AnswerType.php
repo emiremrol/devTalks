@@ -13,8 +13,8 @@ class AnswerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('content')
-            ->add('submit', SubmitType::class);
+            ->add('content');
+//            ->add('submit', SubmitType::class);
     }
 
 

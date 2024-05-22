@@ -4,12 +4,14 @@ namespace App\Controller\Question;
 
 
 use App\Entity\Answer;
+use App\Entity\Category;
 use App\Entity\Question;
 use App\Entity\User;
 use App\Form\AnswearType\AnswerType;
 use App\Form\QuestionType\QuestionType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -70,6 +72,8 @@ class QuestionController extends AbstractController
                 return $this->redirectToRoute('show_question', ['id' => $id]);
             }
 
+
+
             $answer->setUser($user);
             $answer->setQuestion($question);
             $answer->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Sofia')));
@@ -83,6 +87,25 @@ class QuestionController extends AbstractController
             'question' => $question,
             'answer_form' => $form,
             'answers' => $question->getAnswers()
+        ]);
+    }
+
+
+    #[Route('/questions', 'show_questions')]
+    public function questionsByCategory(Request $request): Response
+    {
+        $categories = $this->entityManager->getRepository(Category::class)->findAll();
+        $categoryId = $request->query->get('category_id');
+
+        if($categoryId === null){
+            return $this->redirectToRoute('index_page');
+        }
+
+        $questions = $this->entityManager->getRepository(Question::class)->findBy(['category' => $categoryId]);
+
+        return $this->render('home/index.html.twig', [
+            'questions' => $questions,
+            'categories' => $categories
         ]);
     }
 

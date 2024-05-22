@@ -53,6 +53,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'user')]
     private Collection $answers;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $userImg = null;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -215,6 +218,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $answer->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUserImg(): ?string
+    {
+        return $this->userImg ? '/uploads/photos/' . $this->userImg : null;
+    }
+
+    public function setUserImg(?string $userImg): static
+    {
+        $this->userImg = $userImg;
 
         return $this;
     }

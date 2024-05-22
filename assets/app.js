@@ -12,16 +12,25 @@ console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 $(document).ready(function(){
     $("#summernote").summernote(
         {
-            tabsize:2,
-            width:750,
-            height:300,
+            height: '250px',
             toolbar: [
                 ['style', ['style']],
                 ['font', ['bold', 'underline', 'clear']],
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['height', ['height']],
                 ['insert', []]
-            ]
+            ],
+            callbacks: {
+                // onPaste: function(e) {
+                //     var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                //     e.preventDefault();
+                //     document.execCommand('insertText', bufferText, false);
+                // },
+                onInit: function() {
+                    var $editor = $(this);
+                    $editor.css('font-family', 'Times New Roman');
+                }
+            }
         }
     );
 
@@ -29,12 +38,18 @@ $(document).ready(function(){
     $("#summernote2").summernote(
         {
             toolbar: false,
-            tabsize: 2,
-            width: 750,
             callbacks: {
                 onInit: function() {
+
+                    var $editor = $(this);
+                    $editor.css('font-family', 'Times New Roman');
                     // Деактивиране на всички събития
                     $('#summernote2').summernote('disable');
+                },
+                onPaste: function(e) {
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                    e.preventDefault();
+                    document.execCommand('insertText', false, bufferText);
                 }
             }
         }
@@ -49,4 +64,5 @@ function hideFlash(){
     let flash = document.querySelector('.flash-notice')
     flash.style.display = 'none';
 }
+
 
