@@ -2,30 +2,56 @@
 
 
 {% block body %}
-    <div class="container my-5 d-flex justify-content-center py-3">
-        <div class="w-50 p-2">
-            <div class="p-2 w-75">
-                <h3 class="mb-3">Edit user</h3>
-                {{ form_start(form) }}
-                <div class="mb-3">
-                    {{ form_label(form.name, 'User Image', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                    {{ form_widget(form.userImg, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="mb-3">
-                    {{ form_label(form.name, 'Name', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="mb-3">
-                    {{ form_label(form.username, 'Username', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                    {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="mb-3">
-                    {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <button type="submit" class="btn btn-dark"><i class="bi bi-floppy"></i> Edit</button>
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-info flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-5 d-flex flex-column align-items-center">
+                <h1 class="mb-4">Профил</h1>
+                <div class="card rounded-4 p-3 w-100">
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <div class="mb-3 d-flex align-items-center edit-form">
+                            <div class="avatar me-2">
+                                {% if user.userImg %}
+                                    <img src="{{ asset(user.getUserImg()) }}" alt="">
+                                {% else %}
+                                    <div class="d-flex justify-content-center align-items-center border rounded-circle"
+                                         style="width:70px;height:70px">
+                                        <i class="fa-solid fa-user fs-lg"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="upload-wrapper">
+                                <label for="uploadImg"><i class="fa-regular fa-image"></i> Избор на файл</label>
+                                <input type="file" id="uploadImg" name="{{ field_name(form.userImg) }}" hidden>
 
-                {{ form_end(form) }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fName" class="form-label">Име</label>
+                            <input type="text" class="form-control" id="fName" name="{{ field_name(form.firstName) }}"
+                                   value="{{ user.firstName }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="lName" class="form-label">Фамилия</label>
+                            <input type="text" class="form-control" id="lName" name="{{ field_name(form.lastName) }}"
+                                   value="{{ user.lastName }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Е-мейл</label>
+                            <input type="text" class="form-control" id="email" name="{{ field_name(form.email) }}"
+                                   value="{{ user.email }}">
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-dark w-100 my-2"><i class="fa-solid fa-user-pen me-1"></i> Редактирай</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

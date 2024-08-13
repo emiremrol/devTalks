@@ -2,6 +2,7 @@
 
 namespace App\Controller\User;
 
+use App\Entity\Category;
 use App\Entity\User;
 use App\Form\UserType\RegistrationFormType;
 use App\Security\AppAuthenticator;
@@ -22,7 +23,6 @@ class RegistrationController extends AbstractController
         if($this->getUser()){
             return $this->redirectToRoute('user_edit');
         }
-
 
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -48,17 +48,16 @@ class RegistrationController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                // do anything else you need here, like send an email
-
                 return $security->login($user, AppAuthenticator::class, 'main');
             }
 
         }
 
-
+        $categories = $entityManager->getRepository(Category::class)->findBy([], ['name' => 'ASC']);
 
         return $this->render('registration/register.html.twig', [
             'form' => $form,
+            'categories' => $categories
         ]);
     }
 }

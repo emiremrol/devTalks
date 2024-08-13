@@ -151,8 +151,6 @@ class Question
                 $answer->setQuestion(null);
             }
         }
-
         return $this;
     }
-    
 }

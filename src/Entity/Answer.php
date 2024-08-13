@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AnswearRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Cascade;
 
 #[ORM\Table('answers')]
 #[ORM\Entity(repositoryClass: AnswearRepository::class)]
@@ -22,6 +23,7 @@ class Answer
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'answers')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Question $question = null;
 
     #[ORM\ManyToOne(inversedBy: 'answers')]

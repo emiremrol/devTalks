@@ -1,66 +1,97 @@
 {% extends 'base.html.twig' %}
 
 {% block sidebar %}
-    <div class="left-sidebar border me-4 p-3">
-        <h1>Categories</h1>
-        <ul>
+    <div class="left-sidebar px-2">
+        <h2>Категории</h2>
+        <ul class="list-group list-group-flush mt-4">
+            <li class="list-group-item  list-group-item-action">
+                <a href="{{ path('show_questions') }}">Всички въпроси</a>
+            </li>
             {% for category in categories %}
-                <li>
-                    <a href="{{ path('show_questions')}}?category_id={{ category.id }}">{{ category.name }}</a>
+                <li class="list-group-item  list-group-item-action">
+                    <a href="{{ path('show_questions') }}?category_id={{ category.getId()}}">{{ category.getName() }}</a>
                 </li>
             {% endfor %}
         </ul>
     </div>
 {% endblock %}
-{% block body %}
-    <div class="container border pt-5 d-flex align-items-start">
 
-        <div class="d-flex flex-column justify-content-between align-items-center border w-100">
-            <div class="d-flex justify-content-between  align-items-center w-100 p-3">
-                <h1>All Questions</h1>
-                <a href="{{ path('new_question') }}" class="btn btn-primary">Ask Question</a>
+{% block main %}
+    <div class="card border-0">
+        <div class="card-body">
+            <div class="row">
+                <div class="col col-h-md d-flex align-items-center">
+
+                    {% if category  %}
+                        <h2>{{ category.getName() }}</h2>
+                    {% else %}
+                        <h2>Всички въпроси</h2>
+                    {% endif %}
+                </div>
+                <div class="col-3 col-h-md d-flex align-items-center justify-content-end">
+                    <a href="{{ path('new_question') }}" class="btn purple">Задай въпрос</a>
+                </div>
             </div>
+        </div>
+    </div>
 
-            {% set currentDate = date('now') %}
-            {% set currentYear = currentDate|date('Y') %}
-            <div class="question-container w-100 mt-3 p-2">
-                {% for question in questions %}
-                    {% set createdYear = question.createdAt|date('Y') %}
-                    <div class="question-card p-4">
-                        <div class="q-header">
-                            <div class="q-user">
-                                <div class="avatar me-3">
-                                    {% if question.user.userImg %}
-                                        <img src="{{ asset(question.user.getUserImg()) }}" alt="">
-                                    {% else %}
-                                    <i class="fa-solid fa-user"></i>
-                                    {% endif %}
+
+    {# Questions area #}
+
+    {% set currentDate = date('now') %}
+    {% set currentYear = currentDate|date('Y') %}
+
+    <div class="row mt-4">
+        <div class="col ">
+            {% for question in questions %}
+                {% set createdYear = question.createdAt|date('Y') %}
+                <a href="{{ path('show_question', {id: question.id}) }}" class="question">
+                    <div class="card border-0 p-3">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <div class="avatar">
+                                        {% if question.user.userImg %}
+                                            <img src="{{ asset(question.user.getUserImg()) }}" alt="">
+                                        {% else %}
+                                            <div class="d-flex justify-content-center align-items-center border rounded-circle" style="width:44px;height:44px">
+                                                <i class="fa-solid fa-user"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6>{{ question.user.firstName }} {{ question.user.lastName  }}</h6>
+                                    </div>
                                 </div>
                                 <div>
-                                    <p class="m-0 fs-lg fw-bold">{{ question.user.username }}</p>
                                     {% if currentYear == createdYear %}
                                         <span>{{ question.createdAt|date("d M") }}</span>
                                     {% else %}
                                         <span>{{ question.createdAt|date("d M Y") }}</span>
-                                    {% endif%}
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
-
-                        <div class="q-body mt-2">
-                            <div class="q-title fs-lg fw-bold">
-                                <a href="{{ path('show_question', {id: question.id}) }}">
-                                    {{ question.title }}
-                                </a>
-                            </div>
-                            <div class="q-content">
-                                <p class="text-truncate" style="max-width:550px">{{ question.content|raw }}</p>
+                        <div class="card-body">
+                            <h5 class="card-title text-overflow-1">{{ question.title }}</h5>
+                            <div class="text-overflow-2">
+                                {{ question.content|raw }}
                             </div>
                         </div>
                     </div>
+                </a>
+            {% endfor %}
 
-                {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="navigation">
+                {{ knp_pagination_render(questions) }}
             </div>
         </div>
     </div>
+    {# Questions area #}
+
 {% endblock %}
+

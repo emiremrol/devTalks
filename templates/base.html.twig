@@ -3,19 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}DevTalks{% endblock %}</title>
-    <!-- Summernote CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <!-- Summernote JS -->
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <!-- Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <!-- Font Awesome-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Summernote CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <!-- Summernote JS -->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+    <!-- Bootstrap-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
@@ -29,9 +36,11 @@
 </head>
 <body>
 {% block header %}
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-white">
         <div class="container">
-            <a class="navbar-brand" href="{{ path('index_page') }}">DevTalks</a>
+            <a class="navbar-brand" href="{{ path('index_page') }}">
+                <img src="{{ asset('images/logo.png') }}" alt="">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -45,14 +54,15 @@
                             <a class="nav-link" data-bs-toggle="dropdown" aria-current="page" href="#"
                                aria-expanded="false">
                                 {% if app.user.userImg %}
-                                    <img src="{{ asset(app.user.getUserImg()) }}" width="40" height="40" alt="" style="border-radius: 50%;">
+                                    <img src="{{ asset(app.user.getUserImg()) }}" width="40" height="40" alt=""
+                                         style="border-radius: 50%;">
                                 {% else %}
-                                <div>
-                                    <span class="text-white">{{ app.user.name|first|upper }}</span>
-                                </div>
+                                    <div>
+                                        <span class="text-white">{{ app.user.firstName|first|upper }}</span>
+                                    </div>
                                 {% endif %}
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu dropdown-menu-align">
                                 {% if is_granted('ROLE_ADMIN') %}
                                     <li>
                                         <a class="dropdown-item" href="{{ path('admin') }}">
@@ -64,11 +74,11 @@
                                 {% endif %}
                                 <li>
                                     <a class="dropdown-item" href="{{ path('user_edit') }}">
-                                        <i class="fa-regular fa-user me-2"></i>Account</a>
+                                        <i class="fa-regular fa-user me-2"></i>Профил</a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="{{ path('user_change_password') }}">
-                                        <i class="fa-solid fa-lock me-2"></i>Change Password</a>
+                                        <i class="fa-solid fa-lock me-2"></i>Промяна на паролата</a>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider">
@@ -85,10 +95,10 @@
                 {% else %}
                     <ul class="navbar-nav ms-auto me-5 mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a href="{{ path('user_login') }}" class="nav-link">Login</a>
+                            <a href="{{ path('user_login') }}" class="nav-link">Вход</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ path('user_register') }}" class="nav-link">Register</a>
+                            <a href="{{ path('user_register') }}" class="nav-link">Регистрация</a>
                         </li>
                     </ul>
                 {% endif %}
@@ -97,15 +107,65 @@
         </div>
     </nav>
 {% endblock %}
-<div class="container d-flex">
-    {% block sidebar %}
+<div class="container">
+    {% block body %}
+        <div class="row mt-3">
+            <div class="col-3 py-4 bg-white rounded me-2 h-75">
+                {% block sidebar %}{% endblock %}
+            </div>
+            <div class="col">
+                {% block main %}{% endblock %}
+            </div>
+        </div>
     {% endblock %}
-    {% block body %}{% endblock %}
 </div>
 
 
-
-
+{% block footer %}
+    <div class="bg-white mt-3">
+        <div class="container">
+            <div class="row p-5">
+                <div class="col">
+                    <a class="navbar-brand" href="{{ path('index_page') }}">
+                        <img src="{{ asset('images/logo.png') }}" alt="">
+                    </a>
+                </div>
+                <div class="col">
+                    <h4 class="fw-bold">Категории</h4>
+                    <ul class="nav flex-column fw-bold">
+                        {% for category in categories %}
+                            <li class="nav-item">
+                                <a href="{{ path('show_questions') }}?category_id={{ category.id }}"
+                                   class="nav-link text-black">{{ category.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col">
+                    <h4 class="fw-bold ">Навигация</h4>
+                    <ul class="nav flex-column  fw-bold ">
+                        <li class="nav-item">
+                            <a href="{{ path('index_page') }}" class="nav-link text-black">Начало</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path('user_login') }}" class="nav-link text-black">Вход</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path('user_register') }}" class="nav-link text-black">Регистрация</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col d-flex justify-content-end">
+                    {% set currentDate = date('now') %}
+                    {% set currentYear = currentDate|date('Y') %}
+                    <p>&copy; {{ currentYear }} DevTalks. Създадено от Емир Юмер.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 </body>
 </html>

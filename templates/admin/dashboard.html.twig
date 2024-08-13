@@ -1,14 +1,72 @@
 {# templates/admin/my_dashboard.html.twig #}
+
 {% extends '@EasyAdmin/layout.html.twig' %}
 
+
 {% block main %}
-    <h1>Hello, {{ app.user.username }}</h1>
+    <div class="row justify-content-between">
+        <div class="col-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white text-center border-0">
+                    <h4>Регистрирани потребители</h4>
+                </div>
+                <div class="card-body text-center">
+                    <h4>{{ userCount }}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card shadow-sm ">
+                <div class="card-header bg-white text-center border-0">
+                    <h4>Зададени въпроси</h4>
+                </div>
+                <div class="card-body text-center">
+                    <h4>{{ questionCount }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="row my-3">
+        <div class="col">
+            <h4>Последни зададени въпроси</h4>
+        </div>
+    </div>
+    {% set currentDate = date('now') %}
+    {% set currentYear = currentDate|date('Y') %}
 
+    <div class="row mt-4">
+        <div class="col ">
+            {% for question in latestQuestions %}
+                {% set createdYear = question.createdAt|date('Y') %}
+                <a href="{{ path('show_question', {id: question.id}) }}" class="question ">
+                    <div class="card shadow-sm border-0 p-3 my-3">
+                        <div class="card-header bg-white border-0">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <div class="ms-3">
+                                        <h6>{{ question.user.firstName }} {{ question.user.lastName  }}</h6>
+                                    </div>
+                                </div>
+                                <div>
+                                    {% if currentYear == createdYear %}
+                                        <span>{{ question.createdAt|date("d M") }}</span>
+                                    {% else %}
+                                        <span>{{ question.createdAt|date("d M Y") }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-overflow-1">{{ question.title }}</h5>
+                            <div class="text-overflow-2">
+                                {{ question.content|raw }}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
 
-    {% for question in latestQuestions  %}
-        <p>{{ question.title }}</p>
-    {% endfor %}
-
-    {# ... #}
+        </div>
+    </div>
 {% endblock main %}

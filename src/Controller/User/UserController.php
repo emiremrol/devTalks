@@ -2,6 +2,7 @@
 
 namespace App\Controller\User;
 
+use App\Entity\Category;
 use App\Entity\User;
 use App\Form\UserType\ChangePasswordType;
 use App\Form\UserType\UserType;
@@ -17,16 +18,13 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/profile')]
-
 class UserController extends AbstractController
 {
-
     #[Route('')]
     public function profile(): Response
     {
         return $this->redirectToRoute('user_edit');
     }
-
 
     #[Route('/edit', 'user_edit')]
     #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_USER")'))]
@@ -36,6 +34,7 @@ class UserController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response
     {
+        $categories = $entityManager->getRepository(Category::class)->findBy([], ['name' => 'ASC']);
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -43,16 +42,15 @@ class UserController extends AbstractController
             $photoFile = $form->get('userImg')->getData();
 
             if($photoFile) {
-                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $newFilename = uniqid().'.'.$photoFile->guessExtension();
-
                 try{
                     $photoFile->move(
                         $this->getParameter('photos'),
                         $newFilename
                     );
                 } catch (FileException $ex){
-
+                    $this->addFlash('error', "Възникна проблем при качването на снимката.");
+                    return $this->redirectToRoute('user_edit');
                 }
 
                 $user->setUserImg($newFilename);
@@ -66,7 +64,8 @@ class UserController extends AbstractController
 
         return $this->render('user/edit.html.twig', [
             'user' => $user,
-            'form' => $form
+            'form' => $form,
+            'categories' => $categories
         ]);
     }
 
@@ -79,21 +78,17 @@ class UserController extends AbstractController
         Security $security
     ): Response
     {
+        $categories = $entityManager->getRepository(Category::class)->findBy([], ['name' => 'ASC']);
         $form = $this->createForm(ChangePasswordType::class, $user);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
             $entityManager->flush();
-
-
             return $security->logout(validateCsrfToken: false) ?? $this->redirectToRoute('index_page');
         }
-
         return $this->render('user/change_password.html.twig', [
-            'form' => $form
+            'form' => $form,
+            'categories' => $categories
         ]);
     }
-
-
-
 }

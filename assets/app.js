@@ -12,6 +12,7 @@ console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 $(document).ready(function(){
     $("#summernote").summernote(
         {
+            width:'700px',
             height: '250px',
             toolbar: [
                 ['style', ['style']],
@@ -21,11 +22,6 @@ $(document).ready(function(){
                 ['insert', []]
             ],
             callbacks: {
-                // onPaste: function(e) {
-                //     var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
-                //     e.preventDefault();
-                //     document.execCommand('insertText', bufferText, false);
-                // },
                 onInit: function() {
                     var $editor = $(this);
                     $editor.css('font-family', 'Times New Roman');

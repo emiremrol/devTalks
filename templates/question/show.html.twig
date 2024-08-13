@@ -1,74 +1,121 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-    {% for message in app.flashes('notice') %}
-        <div class="alert alert-info flash-notice">
-            {{ message }}
-        </div>
-    {% endfor %}
-
-
-    <div class="container d-flex flex-column justify-content-end py-3 border">
-        <div class="p-2">
-            <div class="my-3">
-                <h4>{{ question.title }}</h4>
-            </div>
-            <div class="mb-3">
-                <textarea name="" id="summernote2" readonly="true">{{ question.content }}</textarea>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="my-3">
-                <h4>Answers</h4>
-            </div>
-
-            {% for answer in answers %}
-                <div class="answer-container w-100 mt-3 p-2">
-                        <div class="answer-card p-4">
-                            <div class="a-header">
-                                <div class="q-user">
-                                    <div class="avatar me-3">
-                                        <i class="fa-solid fa-user"></i>
-                                    </div>
-                                    <div>
-                                        <p class="m-0 fs-lg fw-bold">{{ answer.user.username }}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="a-body mt-2">
-                                <div class="a-content">
-                                    <p>{{ answer.content|raw }}</p>
-                                </div>
-                            </div>
-                        </div>
+    <div class="row">
+        <div class="col">
+            {% for message in app.flashes('notice') %}
+                <div class="alert alert-info flash-notice">
+                    {{ message }}
                 </div>
             {% endfor %}
         </div>
+    </div>
+    <div class="row my-2">
+        <div class="col">
+            <div class="card p-3">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex">
+                            <div class="avatar">
+                                {% if question.user.userImg %}
+                                    <img src="{{ asset(question.user.getUserImg()) }}" alt="">
+                                {% else %}
+                                    <div class="d-flex justify-content-center align-items-center border rounded-circle" style="width:44px;height:44px">
+                                        <i class="fa-solid fa-user"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="ms-3">
+                                <h6>{{ question.user.firstName }} {{ question.user.lastName  }}</h6>
+                                {% set currentDate = date('now') %}
+                                {% set currentYear = currentDate|date('Y') %}
+                                {% set createdYear = question.createdAt|date('Y') %}
+                                {% if currentYear == createdYear %}
+                                    <span class="text-secondary">{{ question.createdAt|date("d M") }}</span>
+                                {% else %}
+                                    <span class="text-secondary">{{ question.createdAt|date("d M Y") }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if app.user == question.user %}
+                            <div>
+                                <a href="{{ path('delete_question', {id: question.id}) }}" class="btn btn-danger"><i class="fa-regular fa-trash-can"></i></a>
+                                <a href="{{ path('question_edit', {id: question.id}) }}" class="btn purple"><i class="fa-regular fa-pen-to-square"></i></a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="p-2">
+                        <div class="d-flex justify-content-between">
+                            <div class="my-3">
+                                <h4>{{ question.title }}</h4>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <textarea name="" id="summernote2" readonly="true" class="summernote-2">{{ question.content }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-3 my-2">
+                {% if answers|length > 0 %}
 
-        <div class="p-2">
-            {{ form_start(answer_form) }}
-            <div class="mb-3">
-                <h4>Your Answer</h4>
-            </div>
-            <div class="mb-3">
-                <textarea name="{{ field_name(answer_form.content) }}" id="summernote" required></textarea>
-            </div>
-            <div class="mb-3">
-{#                name="{{ field_name(answer_form.submit) }}#}
-                {% if app.user %}
-                <button class="btn btn-primary" >Ask</button>
-                {% else %}
-                <button type="submit" class="btn btn-primary"  disabled>Ask</button>
+                <div class="card-header">
+                    <div class="my-3">
+                        <h5>Отговори</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% for answer in answers %}
+                        <div class="answer-container w-100 mt-3 p-2">
+                            <div class="answer-card p-4">
+                                <div class="a-header">
+                                    <div class="q-user">
+                                        <div class="avatar me-3">
+                                            {% if answer.user.userImg %}
+                                                <img src="{{ asset(answer.user.getUserImg()) }}" alt="">
+                                            {% else %}
+                                                <i class="fa-solid fa-user"></i>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <p class="m-0 fs-lg fw-bold">{{ answer.user.firstName }} {{ answer.user.lastName }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="a-body mt-2">
+                                    <div class="a-content">
+                                        <p>{{ answer.content|raw }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
                 {% endif %}
+                <div class="card-footer">
+                    <div class="p-2">
+                        {{ form_start(answer_form) }}
+                        <div class="mb-3">
+                            <h4>Your Answer</h4>
+                        </div>
+                        <div class="mb-3">
+                            <textarea name="{{ field_name(answer_form.content) }}" id="summernote" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            {% if app.user %}
+                                <button class="btn btn-primary" >Ask</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-primary"  disabled>Ask</button>
+                            {% endif %}
+                        </div>
+                        {{ form_end(answer_form) }}
+                    </div>
+                </div>
             </div>
-            {{ form_end(answer_form) }}
         </div>
     </div>
-
-
 {% endblock %}
-
 

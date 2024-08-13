@@ -21,7 +21,11 @@ class QuestionType extends AbstractType
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
-                'label' => 'Category',
+                'attr' => [
+                    'class' => 'form-select'
+                ],
+                'label' => ' ',
+                'placeholder' => 'Моля изберете категория',
                 'required' => true
             ])
             ->add('submit', SubmitType::class);

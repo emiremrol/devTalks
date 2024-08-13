@@ -27,8 +27,9 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
 
-        $latestQuestions = $this->entityManager->getRepository(Question::class)->findBy([], ['createdAt' => 'DESC'], 5);
-
+        $latestQuestions = $this->entityManager->getRepository(Question::class)->findBy([], ['createdAt' => 'DESC'], 3);
+        $questionCount = $this->entityManager->getRepository(Question::class)->count();
+        $userCount = $this->entityManager->getRepository(User::class)->count();
         // return parent::index();
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
@@ -46,7 +47,9 @@ class DashboardController extends AbstractDashboardController
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         //
         return $this->render('admin/dashboard.html.twig', [
-            'latestQuestions' => $latestQuestions
+            'latestQuestions' => $latestQuestions,
+            'questionCount' => $questionCount,
+            'userCount' => $userCount
         ]);
     }
 
@@ -59,9 +62,9 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Categories', 'fa-solid fa-list', Category::class);
         yield MenuItem::linkToCrud('Users', 'fa-solid fa-users', User::class);
-        yield MenuItem::linkToCrud('Questions', 'fa-solid fa-list', Question::class);
-        yield MenuItem::linkToCrud('Answers', 'fa-solid fa-list', Answer::class);
+        yield MenuItem::linkToCrud('Categories', 'fa-solid fa-list', Category::class);
+        yield MenuItem::linkToCrud('Questions', 'fa-solid fa-question', Question::class);
+        yield MenuItem::linkToCrud('Answers', 'fa-solid fa-comment', Answer::class);
     }
 }

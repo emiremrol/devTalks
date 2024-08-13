@@ -24,7 +24,7 @@ class UserType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '1024k',
+                        'maxSize' => '2M',
                         'mimeTypes' => [
                             'image/jpeg',
                             'image/png'
@@ -33,8 +33,8 @@ class UserType extends AbstractType
                     ])
                 ]
             ])
-            ->add('name')
-            ->add('username')
+            ->add('firstName')
+            ->add('lastName')
             ->add('email');
     }
 
